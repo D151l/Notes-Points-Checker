@@ -1,0 +1,28 @@
+drop database if exists notesPointsChecker;
+create database notesPointsChecker;
+use notesPointsChecker;
+
+CREATE TABLE subjects (
+  id VARCHAR(30) NOT NULL,
+  displayName VARCHAR(30),
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE grades (
+  grade INT NOT NULL,
+  subjectId VARCHAR(30) NOT NULL,
+  advancedCourse INT NOT NULL,
+  email VARCHAR(30) NOT NULL,
+  FOREIGN KEY(subjectId) REFERENCES subjects(id)
+);
+
+INSERT INTO subjects (id,displayName) VALUES ('deutsch','Deutsch');
+INSERT INTO subjects (id,displayName) VALUES ('wun','Werte und Normen');
+INSERT INTO subjects (id,displayName) VALUES ('mathe','Mahte');
+INSERT INTO subjects (id,displayName) VALUES ('englisch','Englisch');
+INSERT INTO subjects (id,displayName) VALUES ('int','Informations Technick');
+INSERT INTO subjects (id,displayName) VALUES ('bifim','Berufliche Imformatik');
+INSERT INTO subjects (id,displayName) VALUES ('praxis','Fach Praxis');
+INSERT INTO subjects (id,displayName) VALUES ('physik','Physik');
+INSERT INTO subjects (id,displayName) VALUES ('bvi','Witschaft');
+INSERT INTO subjects (id,displayName) VALUES ('sport','Sport');

@@ -17,15 +17,21 @@
         
           $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
 
-          $statement = $pdo->prepare("SELECT * FROM subjects");
-          $statement->execute(); 
-          $anzahl_user = $statement->rowCount();
-          echo "Es wurden $anzahl_user Datensätze gefunden!<br>";
 
-          $sql = "SELECT * FROM subjects";
-          foreach ($pdo->query($sql) as $row) {
-            echo  $row["id"] ." - ".$row["displayName"]. "<br>";
-          }
         ?>
+
+      <form action="info.php" method="post">
+        <hr>
+        <?php
+            $sql = "SELECT * FROM subjects";
+            foreach ($pdo->query($sql) as $row) {
+                echo $row["displayName"]. "<br>";
+                echo '<input type="number" name="'. $row["id"] .'-point"  placeholder="0-15" /><br>';
+                echo '<input type="checkbox" name="'. $row["id"] .'-lk" value="true">';
+                echo '<label for="'. $row["id"] .'-lk"> Dieses Fach ist bei mir ein Leistungskurs.</label><br><hr>';
+            }
+        ?>
+        <input type="Submit" value="Absenden" />
+      </form>
     </body>
 </html>

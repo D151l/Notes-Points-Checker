@@ -17,15 +17,18 @@
         
           $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
 
-          $statement = $pdo->prepare("SELECT * FROM subjects");
-          $statement->execute(); 
-          $anzahl_user = $statement->rowCount();
-          echo "Es wurden $anzahl_user Datensätze gefunden!<br>";
 
-          $sql = "SELECT * FROM subjects";
-          foreach ($pdo->query($sql) as $row) {
-            echo  $row["id"] ." - ".$row["displayName"]. "<br>";
-          }
+        ?>
+        <?php
+            $sql = "SELECT * FROM subjects";
+            foreach ($pdo->query($sql) as $row) {
+                echo '<hr>';
+                echo $row["displayName"]. "<br>";
+                echo 'Deine Punkte:'. $_POST[$row["id"] .'-point'].'<br>';
+                if (isset($_POST[$row["id"] .'-lk']))
+                  if ($_POST[$row["id"] .'-lk'])
+                    echo 'Es ist ein Leistungsfach bei dir. <br>';
+            }
         ?>
     </body>
 </html>
