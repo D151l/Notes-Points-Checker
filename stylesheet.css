@@ -94,10 +94,6 @@ button:hover {
     align-items: center;
 }
 
-label {
-    margin-right: 10px;
-}
-
 .search-input {
     padding: 8px;
     width: 200px;
@@ -159,16 +155,6 @@ button:hover {
 
 .login-form button:hover {
     background-color: #555;
-}
-
-.login-form .lk-checkbox {
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.login-form .lk-checkbox label {
-    margin-left: 8px;
 }
 
 .text-red {

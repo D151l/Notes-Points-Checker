@@ -34,33 +34,45 @@
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
                     <form action="grades-preview.php" method="post">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Sollen diese Daten abgespeichert werden?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="email" id="email" name="email" placeholder="max@musterman.de" required></td>
+                                    <td><input type="checkbox" id="save-datar" name="save-datar"></td>
+                                    </tr>
+           
+                            </tbody>
+                        </table>
 
-                        <label for="email">Email</label>
-                        <center><input type="email" id="email" name="email" class="login-input"
-                                placeholder="max@musterman.de" required>
-                        </center>
-
-                        <div class="">
-                            <input type="checkbox" id="save-datar" name="save-datar">
-                            <label for="save-datar">Sollen diese Daten abgespeichert werden?</label>
-                        </div>
-
-                        <?php
-            $sql = "SELECT * FROM subjects";
-            foreach ($pdo->query($sql) as $row) {
-                echo '
-                <hr><label for="grade">Deine Note für das Fach '. $row["displayName"] .'</label>
-                <center><input type="number" id="'. $row["id"] .'-grade" name="'. $row["id"] .'-grade" min="0" max="15" class="login-input"
-                        placeholder="0-15" required>
-                </center>
-
-                <div class="'. $row["id"] .'-lk-checkbox">
-                    <input type="checkbox" id="is-lk-'. $row["id"] .'" name="is-lk-'. $row["id"] .'">
-                    <label for="is-lk">Dieses Fach ich bei mir ein Leistungskurs!</label>
-                </div>
-                ';
-            }
-        ?>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fach</th>
+                                    <th>Noten Punkte</th>
+                                    <th>Leistungskurs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $sql = "SELECT * FROM subjects";
+                                foreach ($pdo->query($sql) as $row) {
+                                    echo '
+                                        <tr>
+                                            <td>'. $row["displayName"] .'</td>
+                                            <td><input type="number" id="'. $row["id"] .'-grade" name="'. $row["id"] .'-grade" min="0" max="15" required></td>
+                                            <td><input type="checkbox" id="is-lk-'. $row["id"] .'" name="is-lk-'. $row["id"] .'"></td>
+                                        </tr>
+                                    ';
+                                }
+                                ?>
+                            </tbody>
+                        </table>
 
                         <hr>
 
