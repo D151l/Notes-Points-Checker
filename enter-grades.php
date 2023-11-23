@@ -38,7 +38,7 @@
             <center>
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
-                    <form action="grades-preview.php">
+                    <form action="grades-preview.php" method="post">
 
                         <label for="email">Email</label>
                         <center><input type="email" id="email" name="email" class="login-input"
@@ -64,7 +64,7 @@
 
                         <hr>
 
-                        <button type="submit">Absenden</button>
+                        <button type="submit">Weiter</button>
                     </form>
                 </div>
             </center>

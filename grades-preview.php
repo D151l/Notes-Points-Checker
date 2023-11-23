@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Notes Points Checker - Noten eintragen</title>
+    <title>Notes Points Checker - Noten Übersicht</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="stylesheet.css">
@@ -32,17 +32,17 @@
             </ul>
         </div>
         <div class="content">
-            <h1>Du willst deine Noten eintragen oder Checken?</h1>
+            <h1>Übersicht</h1>
             <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.
             </p>
 
-            <h1>Email: <?php echo $_POST[$row["id"]]; ?></h1>
+            <h1>Email: <?php echo $_POST['email']; ?></h1>
 
             <table>
                 <thead>
                     <tr>
                         <th>Fach</th>
-                        <th>Note</th>
+                        <th>Noten Punkte</th>
                         <th>Leistungsfach</th>
                     </tr>
                 </thead>
@@ -51,10 +51,11 @@
                 <?php
             $sql = "SELECT * FROM subjects";
             foreach ($pdo->query($sql) as $row) {
-                if ($_POST['is-lk-'. $row["id"]])
-                  $isLK = "Ja";
-                else
-                 $isLK = "Nein";
+
+                $isLK = "Nein";
+                if (isset($_POST['is-lk-'. $row["id"]]))
+                  if ($_POST['is-lk-'. $row["id"]])
+                    $isLK = "Ja";
 
                 echo '
                 <tr>
@@ -67,7 +68,12 @@
         ?>
                 </tbody>
             </table>
+            
+            <br>
 
+            <form action="enter-grades.php" method="post">
+                <button type="submit">Absenden</button>
+            </form>
         </div>
     </div>
 </body>
