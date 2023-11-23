@@ -33,7 +33,7 @@
         </div>
         <div class="content">
             <h1>Übersicht</h1>
-            <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.
+            <p>Hier kannst du sehen, ob du genügend Punkte hast.
             </p>
 
             <h1>Email: <?php echo $_POST['email']; ?></h1>
@@ -74,6 +74,11 @@
             <form action="enter-grades.php" method="post">
                 <button type="submit">Absenden</button>
             </form>
+
+            <br>
+
+            <p>Du würdest mit diesen Noten Punkten dein Abitur <span class="text-green">bestenen</span>!</p>
+            <p>Du würdest mit diesen Noten Punkten dein Abitur <span class="text-red">nicht bestenen</span>!</p>
         </div>
     </div>
 </body>

@@ -170,3 +170,11 @@ button:hover {
 .login-form .lk-checkbox label {
     margin-left: 8px;
 }
+
+.text-red {
+    color: red;
+}
+
+.text-green {
+    color: green;
+}
