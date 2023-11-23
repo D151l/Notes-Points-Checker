@@ -12,13 +12,9 @@
 
 <body>
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="index.html">Startseite</a></li>
-                <li><a href="compare.html">Vergleiche dich</a></li><li><a href="enter-grades.php">Noten eintragen</a></li>
-                <li><a href="#">Login</a></li>
-            </ul>
-        </div>
+        <?php
+          include("./includes/Sidebar.php")
+        ?>
         <div class="content">
             <h1>Du willst dich einloggen?</h1>
             <p>Hier kannst du dich mit deinen Daten einloggen.</p>

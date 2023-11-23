@@ -23,20 +23,15 @@
 
 <body>
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="index.html">Startseite</a></li>
-                <li><a href="compare.html">Vergleiche dich</a></li>
-                <li><a href="#">Noten eintragen</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </div>
+        <?php
+          include("./includes/Sidebar.php")
+        ?>
         <div class="content">
             <h1>Übersicht</h1>
             <p>Hier kannst du sehen, ob du genügend Punkte hast.
             </p>
 
-            <h1>Email: <?php echo $_POST['email']; ?></h1>
+            <h1>Email: <?php $email = $_POST['email']; echo $email; ?></h1>
 
             <table>
                 <thead>
@@ -49,18 +44,34 @@
                 <tbody>
 
                 <?php
+
+                $saveData = false;
+                if (isset($_POST['save-datar']))
+                    $saveData = true;
+
             $sql = "SELECT * FROM subjects";
             foreach ($pdo->query($sql) as $row) {
 
+                $points = $_POST[$row["id"] .'-grade'];
+
                 $isLK = "Nein";
-                if (isset($_POST['is-lk-'. $row["id"]]))
-                  if ($_POST['is-lk-'. $row["id"]])
+                $isLKAsNumber = 0;
+                if (isset($_POST['is-lk-'. $row["id"]])) {
+                  if ($_POST['is-lk-'. $row["id"]]) {
                     $isLK = "Ja";
+                    $isLKAsNumber = 1;
+                  }
+                }
+
+                if ($saveData) {
+                    $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, advancedCourse, email) VALUES (?, ?, ?, ?)");
+                    $statement->execute(array($points, $row["id"], $isLKAsNumber, $email));   
+                }
 
                 echo '
                 <tr>
                 <td>'. $row["displayName"] .'</td>
-                <td>'. $_POST[$row["id"] .'-grade'].'</td>
+                <td>'. $points.'</td>
                 <td>'. $isLK .'</td>
             </tr>
                 ';

@@ -23,14 +23,9 @@
 
 <body>
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="index.html">Startseite</a></li>
-                <li><a href="compare.html">Vergleiche dich</a></li>
-                <li><a href="#">Noten eintragen</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </div>
+        <?php
+          include("./includes/Sidebar.php")
+        ?>
         <div class="content">
             <h1>Du willst deine Noten eintragen oder Checken?</h1>
             <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.
@@ -44,6 +39,11 @@
                         <center><input type="email" id="email" name="email" class="login-input"
                                 placeholder="max@musterman.de" required>
                         </center>
+
+                        <div class="">
+                            <input type="checkbox" id="save-datar" name="save-datar">
+                            <label for="save-datar">Sollen diese Daten abgespeichert werden?</label>
+                        </div>
 
                         <?php
             $sql = "SELECT * FROM subjects";

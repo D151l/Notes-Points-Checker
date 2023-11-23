@@ -12,13 +12,9 @@
 
 <body>
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="index.html">Startseite</a></li>
-                <li><a href="#">Vergleiche dich</a></li><li><a href="enter-grades.php">Noten eintragen</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </div>
+        <?php
+          include("./includes/Sidebar.php")
+        ?>
         <div class="content">
             <h1>Noten Vergleich!</h1>
             <p>Hier kannst du schauen wie andere in denn Verschiedenen Fächern ist.</p>

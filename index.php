@@ -12,13 +12,9 @@
 
 <body>
     <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="#">Startseite</a></li>
-                <li><a href="compare.html">Vergleiche dich</a></li><li><a href="enter-grades.php">Noten eintragen</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </div>
+        <?php
+                  include("./includes/Sidebar.php")
+                ?>
         <div class="content">
             <h1>Willkommen auf Notes Points Checker!</h1>
             <p>Hier kannst du schauen ob deine Noten für das Abitur reichen!</p>
