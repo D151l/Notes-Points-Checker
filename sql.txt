@@ -12,6 +12,7 @@ CREATE TABLE grades (
   grade INT NOT NULL,
   subjectId VARCHAR(30) NOT NULL,
   advancedCourse INT NOT NULL,
+  halfYear VARCHAR(30) NOT NULL,
   email VARCHAR(30) NOT NULL,
   FOREIGN KEY(subjectId) REFERENCES subjects(id)
 );
