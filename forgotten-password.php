@@ -28,7 +28,7 @@
 
                         <button type="submit">Anmelden</button>
                     </form><br>
-                    <a href="login.html">Ich mein Passwort doch nicht vergessen!</a>
+                    <a href="login.php">Ich mein Passwort doch nicht vergessen!</a>
                 </div>
             </center>
         </div>

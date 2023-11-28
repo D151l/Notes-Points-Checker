@@ -33,7 +33,7 @@
 
                             <button type="submit">Anmelden</button>
                     </form><br>
-                    <a href="login.html">Ich habe doch einen Account!</a>
+                    <a href="login.php">Ich habe doch einen Account!</a>
                 </div>
             </center>
         </div>
