@@ -16,6 +16,23 @@ CREATE TABLE grades (
   FOREIGN KEY(subjectId) REFERENCES subjects(id)
 );
 
+CREATE TABLE users (
+  id INT NOT NULL,
+  displayName VARCHAR(30) NOT NULL,
+  email VARCHAR(30) NOT NULL,
+  password VARCHAR(30) NOT NULL,
+  createdAt TIMESTAMP  NOT NULL,
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE password_reset (
+  token VARCHAR(30) NOT NULL,
+  userid INT NOT NULL,
+  createdAt TIMESTAMP NOT NULL,
+  expireAt TIMESTAMP NOT NULL,
+  FOREIGN KEY(userid) REFERENCES users(id), PRIMARY KEY(token)
+);
+
 INSERT INTO subjects (id,displayName) VALUES ('deutsch','Deutsch');
 INSERT INTO subjects (id,displayName) VALUES ('wun','Werte und Normen');
 INSERT INTO subjects (id,displayName) VALUES ('mathe','Mahte');
