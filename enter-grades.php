@@ -2,15 +2,16 @@
 <html>
 
 <?php
-          $host = "localhost";
-          $user = "root";
-          $password = "";
-          $database = "notesPointsChecker";
+    session_start();
+
+    $host = "localhost";
+    $user = "root";
+    $password = "";
+    $database = "notesPointsChecker";
         
-          $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
 
-
-        ?>
+?>
 
 <head>
     <meta charset="utf-8">
