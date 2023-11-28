@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html>
 
+<?php
+    session_start();
+
+    $host = "localhost";
+    $user = "root";
+    $password = "";
+    $database = "notesPointsChecker";
+        
+    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+    
+    $errorMassage = "";
+
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        $userEmail = $_POST['email'];
+        $userPassword = $_POST['password'];
+
+        $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $result = $statement->execute(array('email' => $userEmail));
+        $user = $statement->fetch();
+        
+        if ($user !== false) {
+            if (password_verify($userPassword, $user['password'])) {
+            $_SESSION['userid'] = $user['id'];
+            $_SESSION['userDisplayName'] = $user['displayName'];
+            echo '<script language="javascript" type="text/javascript"> document.location="index.php"; </script>';
+            } else {
+            $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!1";
+        }
+        } else {
+            $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!2";
+        }
+    }
+?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,9 +55,14 @@
             <center>
                 <div class="login-form">
                     <h2>Login</h2>
-                    <form>
-                        <label for="username">Benutzername oder Email</label>
-                        <center><input type="text" id="username" name="username" class="login-input" required></center>
+                    <?php
+                    if ($errorMassage != "") {
+                        echo "<h3>". $errorMassage ."</h3>";
+                    }
+                    ?>
+                    <form action="login.php" method="post">
+                        <label for="email">Email</label>
+                        <center><input type="email" id="email" name="email" class="login-input" required></center>
 
                         <label for="password">Passwort</label>
                         <center><input type="password" id="password" name="password" class="login-input" required></center>

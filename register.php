@@ -45,8 +45,8 @@
             } else {
                 $passwordHash = password_hash($userPassword, PASSWORD_DEFAULT);
                 
-                $statement = $pdo->prepare("INSERT INTO users (displayName, email, password) VALUES (:displayName, :email, :passwort)");
-                $result = $statement->execute(array('displayName' => $userName, 'email' => $userEmail, 'passwort' => $passwordHash));
+                $statement = $pdo->prepare("INSERT INTO users (displayName, email, password) VALUES (:displayName, :email, :passwordHash)");
+                $result = $statement->execute(array('displayName' => $userName, 'email' => $userEmail, 'passwordHash' => $passwordHash));
         
                 if($result) {        
                     echo '<script language="javascript" type="text/javascript"> document.location="login.php"; </script>';
