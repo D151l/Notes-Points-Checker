@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
 
+<?php
+    session_start();
+
+    $host = "localhost";
+    $user = "root";
+    $password = "";
+    $database = "notesPointsChecker";
+        
+    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+
+?>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,7 +40,7 @@
 
                         <button type="submit">Anmelden</button>
                     </form><br>
-                    <a href="login.html">Ich mein Passwort doch nicht vergessen!</a>
+                    <a href="login.php">Ich mein Passwort doch nicht vergessen!</a>
                 </div>
             </center>
         </div>

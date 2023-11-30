@@ -2,19 +2,20 @@
 <html>
 
 <?php
-          $host = "localhost";
-          $user = "root";
-          $password = "";
-          $database = "notesPointsChecker";
-        
-          $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+    session_start();
 
-        $maxRows = 10;
-
+    $host = "localhost";
+    $user = "root";
+    $password = "";
+    $database = "notesPointsChecker";
         
-        if (isset($_GET['show-more']))
-            $maxRows = $_GET['show-more'];
-        ?>
+    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+
+    $maxRows = 10;
+
+    if (isset($_GET['show-more']))
+        $maxRows = $_GET['show-more'];
+?>
 
 <head>
     <meta charset="utf-8">
