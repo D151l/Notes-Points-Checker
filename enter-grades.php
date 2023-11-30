@@ -4,6 +4,10 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['userDisplayName'])) {
+        echo '<script language="javascript" type="text/javascript"> document.location="index.php?not-logind=1"; </script>';
+    }
+
     $host = "localhost";
     $user = "root";
     $password = "";
@@ -35,21 +39,14 @@
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
                     <form action="grades-preview.php" method="post">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Email</th>
-                                    <th>Sollen diese Daten abgespeichert werden?</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="email" id="email" name="email" placeholder="max@musterman.de" required></td>
-                                    <td><input type="checkbox" id="save-datar" name="save-datar"></td>
-                                    </tr>
-           
-                            </tbody>
-                        </table>
+                    <label for="cars">Für welches Semester ist dieses Zügnis:</label>
+
+                    <select name="semester" id="semester" required>
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
+                        <option value="4">Semester 4</option>
+                    </select> 
 
                         <table>
                             <thead>

@@ -16,6 +16,7 @@ html {
     color: #fff;
     padding: 20px;
     position: relative;
+    height: 100%;
 }
 
 .sidebar-bottum {
@@ -75,7 +76,7 @@ label {
     margin-right: 10px;
 }
 
-input {
+input select {
     padding: 8px;
     width: 200px;
     margin-right: 10px;
@@ -145,7 +146,7 @@ button:hover {
     margin-bottom: 8px;
 }
 
-.login-form input {
+.login-form input, select {
     padding: 8px;
     margin-bottom: 16px;
 }
