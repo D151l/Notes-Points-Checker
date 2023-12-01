@@ -25,6 +25,7 @@
             if (password_verify($userPassword, $user['password'])) {
             $_SESSION['userid'] = $user['id'];
             $_SESSION['userDisplayName'] = $user['displayName'];
+            $_SESSION['userEmail'] = $user['email'];
             echo '<script language="javascript" type="text/javascript"> document.location="index.php"; </script>';
             } else {
             $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!1";
