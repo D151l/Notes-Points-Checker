@@ -82,6 +82,15 @@ input select {
     margin-right: 10px;
 }
 
+.button {
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 button {
     padding: 8px 16px;
     background-color: #333;

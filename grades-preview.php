@@ -11,6 +11,7 @@
         
     $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
 
+    $semester = $_POST['semester'];
 ?>
 
 <head>
@@ -32,48 +33,33 @@
             <p>Hier kannst du sehen, ob du genügend Punkte hast.
             </p>
 
-            <h1>Email: <?php $email = $_POST['email']; echo $email; ?></h1>
+            <h2>Noten für das Semester <?php echo $semester; ?></h2>
 
             <table>
                 <thead>
                     <tr>
                         <th>Fach</th>
                         <th>Noten Punkte</th>
-                        <th>Leistungsfach</th>
                     </tr>
                 </thead>
                 <tbody>
 
                 <?php
 
-                $saveData = false;
-                if (isset($_POST['save-datar']))
-                    $saveData = true;
+  
 
             $sql = "SELECT * FROM subjects";
             foreach ($pdo->query($sql) as $row) {
 
                 $points = $_POST[$row["id"] .'-grade'];
 
-                $isLK = "Nein";
-                $isLKAsNumber = 0;
-                if (isset($_POST['is-lk-'. $row["id"]])) {
-                  if ($_POST['is-lk-'. $row["id"]]) {
-                    $isLK = "Ja";
-                    $isLKAsNumber = 1;
-                  }
-                }
-
-                if ($saveData) {
-                    $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, advancedCourse, email) VALUES (?, ?, ?, ?)");
-                    $statement->execute(array($points, $row["id"], $isLKAsNumber, $email));   
-                }
-
+                $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, semester, userid) VALUES (?, ?, ?, ?)");
+                $statement->execute(array($points, $row["id"], $semester, $_SESSION['userid']));   
+                
                 echo '
                 <tr>
                 <td>'. $row["displayName"] .'</td>
                 <td>'. $points.'</td>
-                <td>'. $isLK .'</td>
             </tr>
                 ';
             }
@@ -88,9 +74,6 @@
             </form>
 
             <br>
-
-            <p>Du würdest mit diesen Noten Punkten dein Abitur <span class="text-green">bestenen</span>!</p>
-            <p>Du würdest mit diesen Noten Punkten dein Abitur <span class="text-red">nicht bestenen</span>!</p>
         </div>
     </div>
 </body>

@@ -20,7 +20,6 @@ CREATE TABLE users (
 CREATE TABLE grades (
   grade INT NOT NULL,
   subjectId VARCHAR(30) NOT NULL,
-  advancedCourse INT NOT NULL,
   semester VARCHAR(30) NOT NULL,
   userid INT NOT NULL,
   FOREIGN KEY (subjectId) REFERENCES subjects(id),

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['userDisplayName'])) {
-        echo '<script language="javascript" type="text/javascript"> document.location="index.php?not-logind=1"; </script>';
-    }
+if (!isset($_SESSION['userDisplayName'])) {
+    header("Location: index.php?not-logind=1");
+    exit();
+}
 
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "notesPointsChecker";
-        
-    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
-
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=notesPointsChecker', 'root', '');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Verbindungsfehler: ' . $e->getMessage());
+}
 ?>
 
 <head>
@@ -28,47 +28,46 @@
 
 <body>
     <div class="container">
-        <?php
-          include("./includes/Sidebar.php")
-        ?>
+        <?php include("./includes/Sidebar.php"); ?>
         <div class="content">
             <h1>Du willst deine Noten eintragen oder Checken?</h1>
-            <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.
-            </p>
+            <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.</p>
             <center>
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
                     <form action="grades-preview.php" method="post">
-                    <label for="cars">Für welches Semester ist dieses Zügnis:</label>
-
-                    <select name="semester" id="semester" required>
-                        <option value="1">Semester 1</option>
-                        <option value="2">Semester 2</option>
-                        <option value="3">Semester 3</option>
-                        <option value="4">Semester 4</option>
-                    </select> 
+                        <label for="semester">Für welches Semester ist dieses Zeugnis:</label>
+                        <select name="semester" id="semester" required>
+                            <?php
+                            for ($i = 1; $i <= 4; $i++) {
+                                $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND userid = ?");
+                                $statement->execute([$i, $_SESSION['userid']]);
+                                if ($statement->rowCount() < 1) {
+                                    echo "<option value=\"$i\">Semester $i</option>";
+                               }
+                            }
+                            ?>
+                        </select>
 
                         <table>
                             <thead>
                                 <tr>
                                     <th>Fach</th>
                                     <th>Noten Punkte</th>
-                                    <th>Leistungskurs</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
+                                <?php
                                 $sql = "SELECT * FROM subjects";
                                 foreach ($pdo->query($sql) as $row) {
                                     echo '
                                         <tr>
-                                            <td>'. $row["displayName"] .'</td>
-                                            <td><input type="number" id="'. $row["id"] .'-grade" name="'. $row["id"] .'-grade" min="0" max="15" required></td>
-                                            <td><input type="checkbox" id="is-lk-'. $row["id"] .'" name="is-lk-'. $row["id"] .'"></td>
+                                            <td>' . $row["displayName"] . '</td>
+                                            <td><input type="number" id="' . $row["id"] . '-grade" name="' . $row["id"] . '-grade" min="0" max="15" required></td>
                                         </tr>
                                     ';
                                 }
-                                ?>
+                            ?>
                             </tbody>
                         </table>
 
@@ -76,10 +75,13 @@
 
                         <button type="submit">Weiter</button>
                     </form>
-                </div>
+               </div>
             </center>
         </div>
     </div>
 </body>
 
 </html>
+<?php
+$pdo = null;
+?>

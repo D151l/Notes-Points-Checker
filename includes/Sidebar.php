@@ -24,7 +24,7 @@
                 <li><a href="compare.php">Vergleiche dich</a></li>
                 <?php
                 if(isset($_SESSION['userDisplayName'])) {
-                    echo '<li><a href="enter-grades.php">Noten eintragen</a></li>';
+                    echo '<li><a href="grades.php">Noten</a></li>';
                 }
                 ?>
             </ul>
