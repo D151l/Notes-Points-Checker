@@ -70,7 +70,6 @@
 
                         <button type="submit">Anmelden</button>
                     </form><br>
-                    <a href="forgotten-password.php">Ich habe mein Passwort vergessen!</a><br><br>
                     <a href="register.php">Ich habe noch kein Account!</a>
                 </div>
             </center>

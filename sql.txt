@@ -26,15 +26,6 @@ CREATE TABLE grades (
   FOREIGN KEY (userid) REFERENCES users(id)
 );
 
-CREATE TABLE password_reset (
-  token VARCHAR(32) NOT NULL,
-  userid INT NOT NULL,
-  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  expireAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY(token),
-  FOREIGN KEY (userid) REFERENCES users(id)
-);
-
 INSERT INTO subjects (id, displayName) VALUES ('deutsch', 'Deutsch');
 INSERT INTO subjects (id, displayName) VALUES ('wun', 'Werte und Normen');
 INSERT INTO subjects (id, displayName) VALUES ('mathe', 'Mahte');
