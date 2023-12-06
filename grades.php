@@ -25,6 +25,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     <title>Notes Points Checker - Noten</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/795090945007812640/1182039052288000140/107086.jpg" type="image/png">
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 

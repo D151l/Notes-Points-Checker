@@ -52,6 +52,7 @@ if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3
     <title>Notes Points Checker - Leistungs Kurse</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/icon.png" type="image/png">
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 

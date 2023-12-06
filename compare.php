@@ -25,6 +25,7 @@ if (isset($_GET['show-more']))
     <title>Notes Points Checker - Vergleich</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/icon.png" type="image/png">
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 

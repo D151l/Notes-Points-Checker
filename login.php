@@ -44,6 +44,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     <title>Notes Points Checker - Login</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/795090945007812640/1182038776550277221/s-l1200.webp" type="image/png">
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 

@@ -66,6 +66,7 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
     <title>Notes Points Checker - Registrieren</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/795090945007812640/1182037212716601484/image.png" type="image/png">
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 
