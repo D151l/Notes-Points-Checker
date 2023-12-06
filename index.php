@@ -2,14 +2,16 @@
 <html>
 
 <?php
-    session_start();
+session_start();
 
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "notesPointsChecker";
-        
-    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "notesPointsChecker";
+
+// Verbinde zu Datenbank
+$pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 ?>
 
@@ -25,12 +27,12 @@
 <body>
     <div class="container">
         <?php
-                  include("./includes/Sidebar.php")
-                ?>
+        include("./includes/Sidebar.php")
+            ?>
         <div class="content">
             <?php
-            if(isset($_SESSION['userDisplayName'])) {
-                echo "<h1>Willkommen ". $_SESSION['userDisplayName'] ." auf Notes Points Checker!</h1>";
+            if (isset($_SESSION['userDisplayName'])) {
+                echo "<h1>Willkommen " . $_SESSION['userDisplayName'] . " auf Notes Points Checker!</h1>";
             } else {
                 echo "<h1>Willkommen auf Notes Points Checker!</h1>";
             }
@@ -43,3 +45,9 @@
 </body>
 
 </html>
+
+
+<?php
+// Schließe die SQL verbindung
+$pdo = null;
+?>

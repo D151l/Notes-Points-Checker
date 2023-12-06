@@ -31,7 +31,8 @@ try {
         <?php include("./includes/Sidebar.php"); ?>
         <div class="content">
             <h1>Du willst deine Noten eintragen oder Checken?</h1>
-            <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.</p>
+            <p>Hier kannst du deine Daten eintragen, Checken wie viele Punkte du hast und dich mit anderen vergleichen.
+            </p>
             <center>
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
@@ -44,7 +45,7 @@ try {
                                 $statement->execute([$i, $_SESSION['userid']]);
                                 if ($statement->rowCount() < 1) {
                                     echo "<option value=\"$i\">Semester $i</option>";
-                               }
+                                }
                             }
                             ?>
                         </select>
@@ -67,7 +68,7 @@ try {
                                         </tr>
                                     ';
                                 }
-                            ?>
+                                ?>
                             </tbody>
                         </table>
 
@@ -75,13 +76,15 @@ try {
 
                         <button type="submit">Weiter</button>
                     </form>
-               </div>
+                </div>
             </center>
         </div>
     </div>
 </body>
 
 </html>
+
 <?php
+// Schließe die SQL verbindung
 $pdo = null;
 ?>

@@ -26,6 +26,14 @@ CREATE TABLE grades (
   FOREIGN KEY (userid) REFERENCES users(id)
 );
 
+CREATE TABLE performance_courses (
+  performance_course INT NOT NULL,
+  subjectId VARCHAR(30) NOT NULL,
+  userid INT NOT NULL,
+  FOREIGN KEY (subjectId) REFERENCES subjects(id),
+  FOREIGN KEY (userid) REFERENCES users(id)
+);
+
 INSERT INTO subjects (id, displayName) VALUES ('deutsch', 'Deutsch');
 INSERT INTO subjects (id, displayName) VALUES ('wun', 'Werte und Normen');
 INSERT INTO subjects (id, displayName) VALUES ('mathe', 'Mahte');

@@ -2,38 +2,40 @@
 <html>
 
 <?php
-    session_start();
+session_start();
 
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "notesPointsChecker";
-        
-    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
-    
-    $errorMassage = "";
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "notesPointsChecker";
 
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $userEmail = $_POST['email'];
-        $userPassword = $_POST['password'];
+// Verbinde zu Datenbank
+$pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $result = $statement->execute(array('email' => $userEmail));
-        $user = $statement->fetch();
-        
-        if ($user !== false) {
-            if (password_verify($userPassword, $user['password'])) {
+$errorMassage = "";
+
+if (isset($_POST['email']) && isset($_POST['password'])) {
+    $userEmail = $_POST['email'];
+    $userPassword = $_POST['password'];
+
+    $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+    $result = $statement->execute(array('email' => $userEmail));
+    $user = $statement->fetch();
+
+    if ($user !== false) {
+        if (password_verify($userPassword, $user['password'])) {
             $_SESSION['userid'] = $user['id'];
             $_SESSION['userDisplayName'] = $user['displayName'];
             $_SESSION['userEmail'] = $user['email'];
             echo '<script language="javascript" type="text/javascript"> document.location="index.php"; </script>';
-            } else {
+        } else {
             $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!1";
         }
-        } else {
-            $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!2";
-        }
+    } else {
+        $errorMassage = "Es konnte kein Benutzer mit dieser E-Mail gefunden werden oder das Passwort war ungültig!2";
     }
+}
 ?>
 
 <head>
@@ -48,8 +50,8 @@
 <body>
     <div class="container">
         <?php
-          include("./includes/Sidebar.php")
-        ?>
+        include("./includes/Sidebar.php")
+            ?>
         <div class="content">
             <h1>Du willst dich einloggen?</h1>
             <p>Hier kannst du dich mit deinen Daten einloggen.</p>
@@ -58,7 +60,7 @@
                     <h2>Login</h2>
                     <?php
                     if ($errorMassage != "") {
-                        echo "<h3>". $errorMassage ."</h3>";
+                        echo "<h3>" . $errorMassage . "</h3>";
                     }
                     ?>
                     <form action="login.php" method="post">
@@ -66,7 +68,8 @@
                         <center><input type="email" id="email" name="email" class="login-input" required></center>
 
                         <label for="password">Passwort</label>
-                        <center><input type="password" id="password" name="password" class="login-input" required></center>
+                        <center><input type="password" id="password" name="password" class="login-input" required>
+                        </center>
 
                         <button type="submit">Anmelden</button>
                     </form><br>
@@ -78,3 +81,9 @@
 </body>
 
 </html>
+
+
+<?php
+// Schließe die SQL verbindung
+$pdo = null;
+?>

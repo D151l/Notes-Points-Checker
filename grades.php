@@ -4,12 +4,19 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['userDisplayName'])) {
+    header("Location: index.php?not-logind=1");
+    exit();
+}
+
 $host = "localhost";
 $user = "root";
 $password = "";
 $database = "notesPointsChecker";
-    
-$pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+
+// Verbinde zu Datenbank
+$pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 ?>
 
 <head>
@@ -28,9 +35,11 @@ $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
             <h1>Übersicht deiner Noten</h1>
             <p>Hier hast du eine Übersicht all deiner Noten!</p>
 
+            <a class="button" href="performance-courses.php">Leistungskurse bearbeiten</a>
+
             <?php
             $semesterStatement = $pdo->prepare("SELECT semester FROM grades WHERE userid = ? GROUP BY semester;");
-            $semesterStatement->execute(array($_SESSION['userid'])); 
+            $semesterStatement->execute(array($_SESSION['userid']));
 
             if ($semesterStatement->rowCount() < 4) {
                 echo '
@@ -58,11 +67,20 @@ $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
                     $subjectSql = "SELECT * FROM subjects";
                     foreach ($pdo->query($subjectSql) as $row) {
+
+                        $lk = "";
+                        $semesterStatement = $pdo->prepare('SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?');
+                        $semesterStatement->execute(array($_SESSION['userid'], $row["id"]));
+                        if ($semesterStatement->rowCount() > 0) {
+                            $lk = "(Leistungs Kurs)";
+                        }
+
+
                         echo '<tr>
-                                <td>'. $row["displayName"] .'</td>';
+                                <td>' . $row["displayName"] . ' ' . $lk . '</td>';
 
                         for ($semester = 1; $semester <= 4; $semester++) {
                             echo '<td>';
@@ -90,7 +108,8 @@ $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
 </html>
 
 <?php
-function displayGrade($pdo, $subjectId, $semester, $userId) {
+function displayGrade($pdo, $subjectId, $semester, $userId)
+{
     $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND subjectId = ? AND userid = ?");
     $statement->execute([$semester, $subjectId, $userId]);
 
@@ -102,5 +121,6 @@ function displayGrade($pdo, $subjectId, $semester, $userId) {
     }
 }
 
+// Schließe die SQL verbindung
 $pdo = null;
 ?>

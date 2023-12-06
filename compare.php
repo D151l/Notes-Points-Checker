@@ -2,19 +2,21 @@
 <html>
 
 <?php
-    session_start();
+session_start();
 
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "notesPointsChecker";
-        
-    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "notesPointsChecker";
 
-    $maxRows = 10;
+// Verbinde zu Datenbank
+$pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    if (isset($_GET['show-more']))
-        $maxRows = $_GET['show-more'];
+$maxRows = 10;
+
+if (isset($_GET['show-more']))
+    $maxRows = $_GET['show-more'];
 ?>
 
 <head>
@@ -29,8 +31,8 @@
 <body>
     <div class="container">
         <?php
-          include("./includes/Sidebar.php")
-        ?>
+        include("./includes/Sidebar.php")
+            ?>
         <div class="content">
             <h1>Noten Vergleich!</h1>
             <p>Hier kannst du schauen wie andere in denn Verschiedenen Fächern ist.</p>
@@ -38,7 +40,8 @@
 
             <div class="search-container">
                 <form action="compare.php">
-                    <input type="text" id="search" name="search" placeholder="Suchbegriff eingeben" class="search-input">
+                    <input type="text" id="search" name="search" placeholder="Suchbegriff eingeben"
+                        class="search-input">
                     <button type="submit">Suchen</button>
                 </form>
             </div>
@@ -52,39 +55,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php
+                    <?php
 
-                if (isset($_GET['search'])) {
-                    $search = $_GET['search'];
+                    if (isset($_GET['search'])) {
+                        $search = $_GET['search'];
 
-                    $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
+                        $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
                             FROM grades 
                             INNER JOIN subjects ON grades.subjectId = subjects.id 
                             WHERE grades.email LIKE :search 
                                 OR grades.email LIKE :searchWildcard 
                                 OR grades.email LIKE :searchWildcardEnd
                                 LIMIT :maxRows';
-                    $statement = $pdo->prepare($sql);
-                    $searchTerm = '%' . $search . '%';
-                    $statement->bindParam(':search', $searchTerm, PDO::PARAM_STR);
-                    $statement->bindParam(':searchWildcard', $searchTerm, PDO::PARAM_STR);
-                    $statement->bindParam(':searchWildcardEnd', $search, PDO::PARAM_STR);
-                    $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
-                    $statement->execute();
+                        $statement = $pdo->prepare($sql);
+                        $searchTerm = '%' . $search . '%';
+                        $statement->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+                        $statement->bindParam(':searchWildcard', $searchTerm, PDO::PARAM_STR);
+                        $statement->bindParam(':searchWildcardEnd', $search, PDO::PARAM_STR);
+                        $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
+                        $statement->execute();
 
-                    $rows = $statement->rowCount();
+                        $rows = $statement->rowCount();
 
-                    if ($rows > 0) {
-                        while ($row = $statement->fetch()) {
-                            echo '
+                        if ($rows > 0) {
+                            while ($row = $statement->fetch()) {
+                                echo '
                                 <tr>
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
                                     <td>' . $row["email"] . '</td>
                                 </tr>';
-                        }
-                    } else {
-                        $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
+                            }
+                        } else {
+                            $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
                                 FROM grades 
                                 INNER JOIN subjects ON grades.subjectId = subjects.id 
                                 WHERE subjects.displayName  LIKE :search 
@@ -94,42 +97,42 @@
                                     OR subjects.id LIKE :searchWildcard 
                                     OR subjects.id LIKE :searchWildcardEnd
                                     LIMIT :maxRows';
-                        $statement = $pdo->prepare($sql);
-                        $searchTerm = '%' . $search . '%';
-                        $statement->bindParam(':search', $searchTerm, PDO::PARAM_STR);
-                        $statement->bindParam(':searchWildcard', $searchTerm, PDO::PARAM_STR);
-                        $statement->bindParam(':searchWildcardEnd', $search, PDO::PARAM_STR);
-                        $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
-                        $statement->execute();
+                            $statement = $pdo->prepare($sql);
+                            $searchTerm = '%' . $search . '%';
+                            $statement->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+                            $statement->bindParam(':searchWildcard', $searchTerm, PDO::PARAM_STR);
+                            $statement->bindParam(':searchWildcardEnd', $search, PDO::PARAM_STR);
+                            $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
+                            $statement->execute();
 
-                        while ($row = $statement->fetch()) {
-                            echo '
+                            while ($row = $statement->fetch()) {
+                                echo '
                                 <tr>
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
                                     <td>' . $row["email"] . '</td>
                                 </tr>';
+                            }
                         }
-                    }
-                
-                 } else {
-                    $sql = "SELECT grades.grade, grades.email, subjects.displayName 
+
+                    } else {
+                        $sql = "SELECT grades.grade, grades.email, subjects.displayName 
                             FROM grades 
                             INNER JOIN subjects ON grades.subjectId=subjects.id
                             LIMIT :maxRows;";
-                    $statement = $pdo->prepare($sql);
-                    $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
-                    $statement->execute();
-                     while ($row = $statement->fetch()) {
-                        echo '
+                        $statement = $pdo->prepare($sql);
+                        $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
+                        $statement->execute();
+                        while ($row = $statement->fetch()) {
+                            echo '
                             <tr>
                                 <td>' . $row["displayName"] . '</td>
                                  <td>' . $row["grade"] . '</td>
                                  <td>' . $row["email"] . '</td>
                             </tr>';
+                        }
                     }
-                 }
-               ?>
+                    ?>
                 </tbody>
             </table>
 
@@ -139,7 +142,7 @@
                 <form action="compare.php">
                     <?php
                     if (isset($_GET['search'])) {
-                        echo '<input type="text" id="search" name="search" value="'. $search .'" hidden>';
+                        echo '<input type="text" id="search" name="search" value="' . $search . '" hidden>';
                     }
                     ?>
                     <input type="number" id="show-more" name="show-more" value=<?php echo $maxRows + 10; ?> hidden>
@@ -151,3 +154,8 @@
 </body>
 
 </html>
+
+<?php
+// Schließe die SQL verbindung
+$pdo = null;
+?>

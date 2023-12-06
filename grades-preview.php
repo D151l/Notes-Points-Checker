@@ -2,16 +2,18 @@
 <html>
 
 <?php
-    session_start();
+session_start();
 
-    $host = "localhost";
-    $user = "root";
-    $password = "";
-    $database = "notesPointsChecker";
-        
-    $pdo = new PDO('mysql:host='. $host .';dbname='. $database, $user, $password);
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "notesPointsChecker";
 
-    $semester = $_POST['semester'];
+// Verbinde zu Datenbank
+$pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$semester = $_POST['semester'];
 ?>
 
 <head>
@@ -26,14 +28,16 @@
 <body>
     <div class="container">
         <?php
-          include("./includes/Sidebar.php")
-        ?>
+        include("./includes/Sidebar.php")
+            ?>
         <div class="content">
             <h1>Übersicht</h1>
             <p>Hier kannst du sehen, ob du genügend Punkte hast.
             </p>
 
-            <h2>Noten für das Semester <?php echo $semester; ?></h2>
+            <h2>Noten für das Semester
+                <?php echo $semester; ?>
+            </h2>
 
             <table>
                 <thead>
@@ -44,29 +48,29 @@
                 </thead>
                 <tbody>
 
-                <?php
+                    <?php
 
-  
 
-            $sql = "SELECT * FROM subjects";
-            foreach ($pdo->query($sql) as $row) {
 
-                $points = $_POST[$row["id"] .'-grade'];
+                    $sql = "SELECT * FROM subjects";
+                    foreach ($pdo->query($sql) as $row) {
 
-                $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, semester, userid) VALUES (?, ?, ?, ?)");
-                $statement->execute(array($points, $row["id"], $semester, $_SESSION['userid']));   
-                
-                echo '
+                        $points = $_POST[$row["id"] . '-grade'];
+
+                        $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, semester, userid) VALUES (?, ?, ?, ?)");
+                        $statement->execute(array($points, $row["id"], $semester, $_SESSION['userid']));
+
+                        echo '
                 <tr>
-                <td>'. $row["displayName"] .'</td>
-                <td>'. $points.'</td>
+                <td>' . $row["displayName"] . '</td>
+                <td>' . $points . '</td>
             </tr>
                 ';
-            }
-        ?>
+                    }
+                    ?>
                 </tbody>
             </table>
-            
+
             <br>
 
             <form action="enter-grades.php" method="post">
@@ -79,3 +83,8 @@
 </body>
 
 </html>
+
+<?php
+// Schließe die SQL verbindung
+$pdo = null;
+?>
