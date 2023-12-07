@@ -39,6 +39,20 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             <a class="button" href="performance-courses.php">Leistungskurse bearbeiten</a>
 
             <?php
+            $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ?');
+            $examStatement->execute(array($_SESSION['userid']));
+            if ($examStatement->rowCount() > 4) {
+
+            } else {
+                echo '
+                <a class="button" href="enter-exams.php">Prüfungen eintragen</a>
+                <br>
+                <p>Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.</p>
+                ';
+            }
+            ?>
+
+            <?php
             $semesterStatement = $pdo->prepare("SELECT semester FROM grades WHERE userid = ? GROUP BY semester;");
             $semesterStatement->execute(array($_SESSION['userid']));
 
@@ -49,12 +63,10 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 <p>Du musst in allen vier Semestern Noten eintragen, um die Punkte zu berechnen.</p>
                 ';
             } else {
-                echo '
-                    <p>Du hast mit deinen momentanen Noten 756 Punkte und hast damit <span class="text-green">bestanden</span>!</p>
-                    <p>Du hast mit deinen momentanen Noten 256 Punkte und hast damit <span class="text-red">nicht bestanden</span>!</p>
-                ';
+                echo '<br><br>'. calculatePoints($pdo, $_SESSION['userid']) .'<br><br>';
             }
             ?>
+        
 
             <table>
                 <thead>
@@ -65,6 +77,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             echo "<th>Semester $i</th>";
                         }
                         ?>
+                        <th>Prüfungen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +92,6 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             $lk = "(Leistungs Kurs)";
                         }
 
-
                         echo '<tr>
                                 <td>' . $row["displayName"] . ' ' . $lk . '</td>';
 
@@ -87,6 +99,16 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             echo '<td>';
                             displayGrade($pdo, $row["id"], $semester, $_SESSION['userid']);
                             echo '</td>';
+                        }
+
+                        $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ? AND subjectId = ? LIMIT 1');
+                        $examStatement->execute(array($_SESSION['userid'], $row["id"]));
+                        $result = $examStatement->fetch(PDO::FETCH_ASSOC);
+
+                        if ($examStatement->rowCount() > 0) {
+                            echo '<td>Punkte: '. $result['examsGrade'] .'</td>';
+                        } else {
+                            echo '<td></td>';
                         }
 
                         echo '</tr>';
@@ -99,6 +121,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             echo '<td><a class="button" href="edit-grades.php?semester=' . $i . '">Noten bearbeiten</a></td>';
                         }
                         ?>
+                        <td><a class="button" href="edit-exams.php">Prüfungen bearbeiten</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -109,7 +132,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 </html>
 
 <?php
-function displayGrade($pdo, $subjectId, $semester, $userId)
+function displayGrade($pdo, $subjectId, $semester, $userId) 
 {
     $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND subjectId = ? AND userid = ?");
     $statement->execute([$semester, $subjectId, $userId]);
@@ -119,6 +142,69 @@ function displayGrade($pdo, $subjectId, $semester, $userId)
         echo $result['grade'];
     } else {
         echo 'Keine Daten';
+    }
+}
+
+function calculatePoints($pdo, $userId) 
+{
+    $statementt = $pdo->prepare("SELECT * FROM grades WHERE userid = ? AND grade < 5");
+    $statementt->execute([$userId]);
+
+    if ($statementt->rowCount() > 7) {
+        return "Du hast mehr als 7 Unterkurse und hast damit <span class='text-red'>nicht bestanden</span!";
+    }
+
+    $gradesStatement = $pdo->prepare("SELECT * FROM grades WHERE userid = ?");
+    $gradesStatement ->execute([$userId]);
+
+    $points = 0;
+    $lowerCourses = 0;
+    while ($row = $gradesStatement->fetch()) {
+        $points = $points + $row['grade'];
+
+        if ($row['grade'] == 0) {
+            return 'Du hast 0 Punkte in '. $row['subjectId'] .' und hast damit <span class="text-red">nicht bestanden</span!';
+        }
+
+        $performanceCoursesStatement = $pdo->prepare("SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?");
+        $performanceCoursesStatement->execute([$userId, $row['subjectId']]);
+
+        if ($performanceCoursesStatement->rowCount() > 0) {
+            $result = $performanceCoursesStatement->fetch(PDO::FETCH_ASSOC);
+
+            if ($result['performance_course'] == "1" || $result['performance_course'] == "2") {
+                $points = $points + $row['grade'];
+            }
+
+            if ($row['grade'] < 5) {
+                echo $row['subjectId'] .' '. $row['grade'] .'<br>';
+                $lowerCourses++;
+            }
+        }
+    }
+
+    if ($lowerCourses > 3) {
+        return 'Du hast '. $lowerCourses .' Unterkurse und damit die 3 Unterkurse die du haben darft überstritten. Du hast damit <span class="text-red">nicht bestanden</span>!';
+    }
+
+
+    $points = $points * 40;
+    $points = $points / 44;
+
+    $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ?');
+    $examStatement->execute(array($userId));
+
+    while ($row = $examStatement->fetch()) {
+        $points += $row['examsGrade'];
+        $points += $row['examsGrade'];
+    }
+
+    if ($points >= 300) {
+        $points = round($points);
+        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-green'>bestanden</span>!";
+    } else {
+        $points = round($points);
+        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit nicht <span class='text-red'>nicht bestanden</span>!";
     }
 }
 
