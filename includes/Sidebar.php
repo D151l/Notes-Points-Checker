@@ -27,5 +27,6 @@
                     echo '<li><a href="grades.php">Noten</a></li>';
                 }
                 ?>
+                <li><a href="help.php">Hilfecentrum</a></li>
             </ul>
         </div>

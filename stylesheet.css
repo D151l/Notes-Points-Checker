@@ -179,3 +179,7 @@ button:hover {
 .text-green {
     color: green;
 }
+
+img.image { 
+    max-width: 100%;
+}
