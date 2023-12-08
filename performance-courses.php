@@ -15,10 +15,12 @@ $database = "notesPointsChecker";
 $pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3-course'])) {
+if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3-course']) && isset($_POST['p4-course']) && isset($_POST['p5-course'])) {
     $p1 = $_POST['p1-course'];
     $p2 = $_POST['p2-course'];
     $p3 = $_POST['p3-course'];
+    $p4 = $_POST['p4-course'];
+    $p5 = $_POST['p5-course'];
 
     // Lösche bestehende Datensätze für den Benutzer
     $deleteStatement = $pdo->prepare('DELETE FROM performance_courses WHERE userid = ?');
@@ -27,7 +29,7 @@ if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3
     // Füge neue Datensätze ein
     $insertStatement = $pdo->prepare("INSERT INTO performance_courses (performance_course, subjectId, userid) VALUES (:performance_course, :subjectId, :userid)");
 
-    for ($i = 1; $i <= 3; $i++) {
+    for ($i = 1; $i <= 5; $i++) {
         $result = $insertStatement->execute(array('performance_course' => $i, 'subjectId' => $_POST["p{$i}-course"], 'userid' => $_SESSION['userid']));
     }
 
@@ -35,7 +37,7 @@ if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3
         header("Location: grades.php");
         exit();
     } else {
-        echo "Fehler beim Speichern der Leistungskurse.";
+        echo "Fehler beim Speichern der Prüfungsfächer.";
     }
 }
 
@@ -47,7 +49,7 @@ if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Notes Points Checker - Leistungs Kurse</title>
+    <title>Notes Points Checker - Prüfungsfächer</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/icon.png" type="image/png">
@@ -58,16 +60,16 @@ if (isset($_POST['p1-course']) && isset($_POST['p2-course']) && isset($_POST['p3
     <div class="container">
         <?php include("./includes/Sidebar.php"); ?>
         <div class="content">
-            <h1>Übersicht über deine Leistungskurse</h1>
-            <p>Hier hast du eine Übersicht über deine Leistungskurse und kannst diese gegebenenfalls bearbeiten.</p>
+            <h1>Übersicht über deine Prüfungsfächer</h1>
+            <p>Hier hast du eine Übersicht über deine Prüfungsfächer und kannst diese gegebenenfalls bearbeiten.</p>
 
             <center>
                 <div class="login-form">
-                    <h2>Leistungskurse</h2>
+                    <h2>Prüfungsfächer</h2>
                     <form action="performance-courses.php" method="post">
                         <?php
                         // Generire das Formular
-                        for ($i = 1; $i <= 3; $i++):
+                        for ($i = 1; $i <= 5; $i++):
                             ?>
                             <label for="p<?= $i ?>-course">Was ist dein P
                                 <?= $i ?> Fach?

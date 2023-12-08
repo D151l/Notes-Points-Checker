@@ -36,7 +36,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             <h1>Übersicht deiner Noten</h1>
             <p>Hier hast du eine Übersicht all deiner Noten!</p>
 
-            <a class="button" href="performance-courses.php">Leistungskurse bearbeiten</a>
+            <a class="button" href="performance-courses.php">Prüfungsfächer bearbeiten</a>
 
             <?php
             $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ?');
@@ -177,7 +177,6 @@ function calculatePoints($pdo, $userId)
             }
 
             if ($row['grade'] < 5) {
-                echo $row['subjectId'] .' '. $row['grade'] .'<br>';
                 $lowerCourses++;
             }
         }
