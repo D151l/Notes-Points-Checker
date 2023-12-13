@@ -151,7 +151,7 @@ function calculatePoints($pdo, $userId)
     $statementt->execute([$userId]);
 
     if ($statementt->rowCount() > 7) {
-        return "Du hast mehr als 7 Unterkurse und hast damit <span class='text-red'>nicht bestanden</span!";
+        return "Du hast mehr als 7 Unterkurse und hast damit <span class='text-red'>nicht bestanden</span>!";
     }
 
     $gradesStatement = $pdo->prepare("SELECT * FROM grades WHERE userid = ?");
@@ -163,7 +163,7 @@ function calculatePoints($pdo, $userId)
         $points = $points + $row['grade'];
 
         if ($row['grade'] == 0) {
-            return 'Du hast 0 Punkte in '. $row['subjectId'] .' und hast damit <span class="text-red">nicht bestanden</span!';
+            return 'Du hast 0 Punkte in '. $row['subjectId'] .' und hast damit <span class="text-red">nicht bestanden</span>!';
         }
 
         $performanceCoursesStatement = $pdo->prepare("SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?");
@@ -203,7 +203,7 @@ function calculatePoints($pdo, $userId)
         return "Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-green'>bestanden</span>!";
     } else {
         $points = round($points);
-        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit nicht <span class='text-red'>nicht bestanden</span>!";
+        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-red'>nicht bestanden</span>!";
     }
 }
 
