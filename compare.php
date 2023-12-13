@@ -88,7 +88,7 @@ if (isset($_GET['show-more']))
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
                                     <td>' . $row["semester"] . '</td>
-                                    <td>' . $row["email"] . '</td>
+                                 <td><a href="compare-dyrect.php?email=' . $row["email"] . '">' . $row["email"] . '</a></td>
                                 </tr>';
                             }
                         } else {
@@ -118,7 +118,7 @@ if (isset($_GET['show-more']))
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
                                     <td>' . $row["semester"] . '</td>
-                                    <td>' . $row["email"] . '</td>
+                                 <td><a href="compare-dyrect.php?email=' . $row["email"] . '">' . $row["email"] . '</a></td>
                                 </tr>';
                             }
                         }
@@ -139,7 +139,7 @@ if (isset($_GET['show-more']))
                                 <td>' . $row["displayName"] . '</td>
                                  <td>' . $row["grade"] . '</td>
                                  <td>' . $row["semester"] . '</td>
-                                 <td>' . $row["email"] . '</td>
+                                 <td><a href="compare-dyrect.php?email=' . $row["email"] . '">' . $row["email"] . '</a></td>
                             </tr>';
                         }
                     }
