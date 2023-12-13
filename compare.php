@@ -52,6 +52,7 @@ if (isset($_GET['show-more']))
                     <tr>
                         <th>Fach</th>
                         <th>Noten Punkte</th>
+                        <th>Semester</th>
                         <th>Email</th>
                     </tr>
                 </thead>
@@ -61,12 +62,13 @@ if (isset($_GET['show-more']))
                     if (isset($_GET['search'])) {
                         $search = $_GET['search'];
 
-                        $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
+                        $sql = 'SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                             FROM grades 
-                            INNER JOIN subjects ON grades.subjectId = subjects.id 
-                            WHERE grades.email LIKE :search 
-                                OR grades.email LIKE :searchWildcard 
-                                OR grades.email LIKE :searchWildcardEnd
+                            INNER JOIN subjects ON grades.subjectId=subjects.id
+                            INNER JOIN users ON grades.userid=users.id
+                            WHERE users.email LIKE :search 
+                                OR users.email LIKE :searchWildcard 
+                                OR users.email LIKE :searchWildcardEnd
                                 LIMIT :maxRows';
                         $statement = $pdo->prepare($sql);
                         $searchTerm = '%' . $search . '%';
@@ -84,13 +86,15 @@ if (isset($_GET['show-more']))
                                 <tr>
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
+                                    <td>' . $row["semester"] . '</td>
                                     <td>' . $row["email"] . '</td>
                                 </tr>';
                             }
                         } else {
-                            $sql = 'SELECT grades.grade, grades.email, subjects.displayName 
+                            $sql = 'SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                                 FROM grades 
-                                INNER JOIN subjects ON grades.subjectId = subjects.id 
+                                INNER JOIN subjects ON grades.subjectId=subjects.id
+                                INNER JOIN users ON grades.userid=users.id
                                 WHERE subjects.displayName  LIKE :search 
                                     OR subjects.displayName LIKE :searchWildcard 
                                     OR subjects.displayName LIKE :searchWildcardEnd
@@ -111,15 +115,17 @@ if (isset($_GET['show-more']))
                                 <tr>
                                     <td>' . $row["displayName"] . '</td>
                                     <td>' . $row["grade"] . '</td>
+                                    <td>' . $row["semester"] . '</td>
                                     <td>' . $row["email"] . '</td>
                                 </tr>';
                             }
                         }
 
                     } else {
-                        $sql = "SELECT grades.grade, grades.email, subjects.displayName 
+                        $sql = "SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                             FROM grades 
                             INNER JOIN subjects ON grades.subjectId=subjects.id
+                            INNER JOIN users ON grades.userid=users.id
                             LIMIT :maxRows;";
                         $statement = $pdo->prepare($sql);
                         $statement->bindParam(':maxRows', $maxRows, PDO::PARAM_INT);
@@ -129,6 +135,7 @@ if (isset($_GET['show-more']))
                             <tr>
                                 <td>' . $row["displayName"] . '</td>
                                  <td>' . $row["grade"] . '</td>
+                                 <td>' . $row["semester"] . '</td>
                                  <td>' . $row["email"] . '</td>
                             </tr>';
                         }
