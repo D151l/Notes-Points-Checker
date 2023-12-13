@@ -15,13 +15,16 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $errorMassage = "";
 
+// Überprüfe ob der Benutzer alle Felder ausgefüllt hat
 if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['passwordRepeated'])) {
 
+    // Speichere die Daten aus dem Formular in Variablen
     $userName = $_POST['username'];
     $userEmail = $_POST['email'];
     $userPassword = $_POST['password'];
     $userPasswordRepeated = $_POST['passwordRepeated'];
 
+    // Überprüfe ob alle Felder ausgefüllt sind und ob die Passwörter überein stimmen und ob die E-Mail-Adresse gültig ist
     if (strlen($userName) == 0) {
         $errorMassage = "Du musst ein Benutzer Name angeben!";
 
@@ -42,13 +45,21 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         $result = $statement->execute(array('email' => $userEmail));
         $user = $statement->fetch();
 
+        // Überprüfe ob es schon einen Benutzer mit dieser E-Mail-Adresse gibt
         if ($user != false) {
             $errorMassage = "Es gibt schon einen Benutzer mit dieser E-Mail-Adresse!";
         } else {
             $passwordHash = password_hash($userPassword, PASSWORD_DEFAULT);
 
-            $statement = $pdo->prepare("INSERT INTO users (displayName, email, password) VALUES (:displayName, :email, :passwordHash)");
-            $result = $statement->execute(array('displayName' => $userName, 'email' => $userEmail, 'passwordHash' => $passwordHash));
+            // Finde die höchste ID in der Datenbank
+            $query = "SELECT MAX(id) AS max_id FROM users";
+            $stmt = $pdo->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $maxId = $result['max_id'];
+
+            // Füge den neuen Benutzer in die Datenbank ein
+            $statement = $pdo->prepare("INSERT INTO users (id, displayName, email, password) VALUES (:id, :displayName, :email, :passwordHash)");
+            $result = $statement->execute(array('id' => $maxId + 1, 'displayName' => $userName, 'email' => $userEmail, 'passwordHash' => $passwordHash));
 
             if ($result) {
                 echo '<script language="javascript" type="text/javascript"> document.location="login.php"; </script>';
