@@ -39,6 +39,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             <a class="button" href="performance-courses.php">Prüfungsfächer bearbeiten</a>
 
             <?php
+            // Überprüfen ob der Benutzer alle Prüfungen eingetragen hat
             $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ?');
             $examStatement->execute(array($_SESSION['userid']));
             if ($examStatement->rowCount() > 4) {
@@ -50,9 +51,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 <p>Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.</p>
                 ';
             }
-            ?>
 
-            <?php
+            // Überprüfen ob der Benutzer alle Noten eingetragen hat
             $semesterStatement = $pdo->prepare("SELECT semester FROM grades WHERE userid = ? GROUP BY semester;");
             $semesterStatement->execute(array($_SESSION['userid']));
 
@@ -82,10 +82,12 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 </thead>
                 <tbody>
                     <?php
+                    // Alle Fächer aus der Datenbank holen
                     $subjectSql = "SELECT * FROM subjects";
                     foreach ($pdo->query($subjectSql) as $row) {
 
                         $lk = "";
+                        // Überprüfe ob das Fach ein Leistungskurs ist
                         $semesterStatement = $pdo->prepare('SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?');
                         $semesterStatement->execute(array($_SESSION['userid'], $row["id"]));
                         if ($semesterStatement->rowCount() > 0) {
@@ -101,6 +103,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                             echo '</td>';
                         }
 
+                        // Überprüfe ob der Benutzer eine Prüfung in dem Fach hat
                         $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ? AND subjectId = ? LIMIT 1');
                         $examStatement->execute(array($_SESSION['userid'], $row["id"]));
                         $result = $examStatement->fetch(PDO::FETCH_ASSOC);
@@ -132,6 +135,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 </html>
 
 <?php
+// Zeige die Note des Benutzers an
 function displayGrade($pdo, $subjectId, $semester, $userId) 
 {
     $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND subjectId = ? AND userid = ?");
@@ -145,8 +149,10 @@ function displayGrade($pdo, $subjectId, $semester, $userId)
     }
 }
 
+// Berechne die Punkte des Benutzers
 function calculatePoints($pdo, $userId) 
 {
+    // Überprüfe ob der Benutzer mehr als 7 Unterkurse hat
     $statementt = $pdo->prepare("SELECT * FROM grades WHERE userid = ? AND grade < 5");
     $statementt->execute([$userId]);
 

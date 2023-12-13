@@ -50,14 +50,13 @@ $semester = $_POST['semester'];
                 <tbody>
 
                     <?php
-
-
-
+                    // Alle Fächer aus der Datenbank holen
                     $sql = "SELECT * FROM subjects";
                     foreach ($pdo->query($sql) as $row) {
 
                         $points = $_POST[$row["id"] . '-grade'];
 
+                        // Die Note des Benutzers aus der Datenbank holen
                         $statement = $pdo->prepare("INSERT INTO grades (grade, subjectId, semester, userid) VALUES (?, ?, ?, ?)");
                         $statement->execute(array($points, $row["id"], $semester, $_SESSION['userid']));
 

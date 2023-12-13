@@ -16,6 +16,7 @@ try {
     die('Verbindungsfehler: ' . $e->getMessage());
 }
 
+// Überprüfen ob ein Semester angegeben wurde
 if (!isset($_GET['semester'])) {
     if (!isset($_POST['semester'])) {
         header("Location: grades.php");
@@ -27,11 +28,13 @@ if (!isset($_GET['semester'])) {
     $semester = $_GET['semester'];
 }
 
+// Überprüfen ob das Semester gültig ist
 if ($semester < 1 || $semester > 4) {
     header("Location: grades.php");
     exit();
 }
 
+// Überprüfen ob der Benutzer das Semester hat
 $statementt = $pdo->prepare("SELECT * FROM grades WHERE userid = ? AND semester = ?");
 $statementt->execute([$_SESSION['userid'], $semester]);
 
@@ -40,6 +43,7 @@ if ($statementt->rowCount() < 1) {
     exit();
 }
 
+// Das Semester mit denn Noten updaten
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = "SELECT * FROM subjects";
     foreach ($pdo->query($sql) as $row) {
@@ -94,9 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <input type="hidden" name="semester" id="semester" value="<?php echo $semester; ?>">
 
                                 <?php
+                                // Alle Fächer aus der Datenbank holen
                                 $sql = "SELECT * FROM subjects";
                                 foreach ($pdo->query($sql) as $row) {
 
+                                    // Die Note des Benutzers aus der Datenbank holen
                                     $statement = $pdo->prepare("SELECT grade FROM grades WHERE userid = ? AND semester = ? AND subjectid = ?");
                                     $statement->execute([$_SESSION['userid'], $semester, $row["id"]]);
                                     $grade = $statement->fetch();

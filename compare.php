@@ -14,7 +14,6 @@ $pdo = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password)
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $maxRows = 10;
-
 if (isset($_GET['show-more']))
     $maxRows = $_GET['show-more'];
 ?>
@@ -59,9 +58,11 @@ if (isset($_GET['show-more']))
                 <tbody>
                     <?php
 
+                    //Überprüfe ob nach etwas gesucht wird
                     if (isset($_GET['search'])) {
                         $search = $_GET['search'];
 
+                        //Überprüfe ob nach einer Email gesucht wird
                         $sql = 'SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                             FROM grades 
                             INNER JOIN subjects ON grades.subjectId=subjects.id
@@ -91,6 +92,7 @@ if (isset($_GET['show-more']))
                                 </tr>';
                             }
                         } else {
+                            //Überprüfe ob nach einem Fach gesucht wird
                             $sql = 'SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                                 FROM grades 
                                 INNER JOIN subjects ON grades.subjectId=subjects.id
@@ -122,6 +124,7 @@ if (isset($_GET['show-more']))
                         }
 
                     } else {
+                        //Wenn nicht nach etwas gesucht wird, zeige die ersten 10 Einträge an
                         $sql = "SELECT grades.grade, grades.semester, users.email, .subjects.displayName 
                             FROM grades 
                             INNER JOIN subjects ON grades.subjectId=subjects.id
