@@ -63,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php
             // Überprüfen, ob ausreichend Leistungskurse eingetragen wurden
             if (count($performanceCourses) < 5) {
-                echo 'Du musst deine Leistungskurse eintragen, bevor du Prüfungen eintragen kannst. <br><br>';
-                echo '<a class="button" href="performance-courses.php">Leistungskurse eintragen</a>';
+                echo 'Du musst deine Prüfungsfächer eintragen, bevor du Prüfungen eintragen kannst. <br><br>';
+                echo '<a class="button" href="performance-courses.php">Prüfungsfächer bearbeiten</a>';
             } else {
                 echo '
                     <center>
