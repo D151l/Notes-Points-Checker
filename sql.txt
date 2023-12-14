@@ -42,13 +42,6 @@ CREATE TABLE exams (
   FOREIGN KEY (userid) REFERENCES users(id)
 );
 
-CREATE TABLE settings (
-  key VARCHAR(30) NOT NULL,
-  value VARCHAR(30) NOT NULL,
-  userid INT NOT NULL,
-  FOREIGN KEY (userid) REFERENCES users(id)
-);
-
 INSERT INTO subjects (id, displayName) VALUES ('deutsch', 'Deutsch');
 INSERT INTO subjects (id, displayName) VALUES ('wun', 'Werte und Normen');
 INSERT INTO subjects (id, displayName) VALUES ('mathe', 'Mahte');
