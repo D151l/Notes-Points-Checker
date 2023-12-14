@@ -78,11 +78,11 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     foreach ($pdo->query($subjectSql) as $row) {
 
                         $lk = "";
-                        // Überprüfe ob das Fach ein Leistungskurs ist
+                        // Überprüfe ob das Fach ein Prüfungsfach ist
                         $semesterStatement = $pdo->prepare('SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?');
                         $semesterStatement->execute(array($_SESSION['userid'], $row["id"]));
                         if ($semesterStatement->rowCount() > 0) {
-                            $lk = "(Leistungs Kurs)";
+                            $lk = "(Prüfungsfach)";
                         }
 
                         echo '<tr>
@@ -190,6 +190,7 @@ function calculatePoints($pdo, $userId)
             }
 
             if ($row['grade'] < 5) {
+                if ($result['performance_course'] == "1" || $result['performance_course'] == "2")
                 $lowerCourses++;
             }
         }
