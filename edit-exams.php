@@ -110,11 +110,14 @@ function displayFormElements($pdo, $performanceCourses)
 {
     foreach ($performanceCourses as $row) {
 
-        $statement = $pdo->prepare("SELECT examsGrade FROM exams WHERE userid = ? ");
+        $statement = $pdo->prepare("SELECT *
+        FROM exams 
+        INNER JOIN subjects ON exams.subjectId=subjects.id
+        WHERE userid = ? ");
         $statement->execute([$_SESSION['userid']]);
         $grade = $statement->fetch();
 
-        echo $row["subjectId"];
+        echo $grade["displayName"];
         echo '<input type="number" id="' . $row["subjectId"] . '" name="' . $row["subjectId"] . '" min="0" max="15" value=' . $grade['examsGrade'] . ' required>';
     }
 }
