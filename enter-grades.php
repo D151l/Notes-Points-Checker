@@ -15,6 +15,18 @@ try {
 } catch (PDOException $e) {
     die('Verbindungsfehler: ' . $e->getMessage());
 }
+
+// Überprüfen ob ein Semester angegeben wurde
+if (!isset($_GET['semester'])) {
+    if (!isset($_POST['semester'])) {
+        header("Location: grades.php");
+        exit();
+    } else {
+        $semester = $_POST['semester'];
+    }
+} else {
+    $semester = $_GET['semester'];
+}
 ?>
 
 <head>
@@ -38,18 +50,8 @@ try {
                 <div class="login-form">
                     <h2>Noten eintragen</h2>
                     <form action="grades-preview.php" method="post">
-                        <label for="semester">Für welches Semester ist dieses Zeugnis:</label>
-                        <select name="semester" id="semester" required>
-                            <?php
-                            for ($i = 1; $i <= 4; $i++) {
-                                $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND userid = ?");
-                                $statement->execute([$i, $_SESSION['userid']]);
-                                if ($statement->rowCount() < 1) {
-                                    echo "<option value=\"$i\">Semester $i</option>";
-                                }
-                            }
-                            ?>
-                        </select>
+                        <h3>Du fügst deine Noten für das Semester <?php echo $semester; ?></h3>
+                        <input type="hidden" name="semester" id="semester" value="<?php echo $semester; ?>">
 
                         <table>
                             <thead>
