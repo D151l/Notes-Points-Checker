@@ -37,37 +37,28 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             <p>Hier hast du eine Übersicht all deiner Noten!</p>
 
             <a class="button" href="performance-courses.php">Prüfungsfächer bearbeiten</a>
-
+            <br><br>
             <?php
-            // Überprüfen ob der Benutzer alle Prüfungen eingetragen hat
-            $examStatement = $pdo->prepare('SELECT * FROM exams WHERE userid = ?');
-            $examStatement->execute(array($_SESSION['userid']));
-            if ($examStatement->rowCount() > 4) {
-
-            } else {
-                echo '
-                <a class="button" href="enter-exams.php">Prüfungen eintragen</a>
-                <br>
-                <p>Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.</p>
-                ';
-            }
-
             // Überprüfen ob der Benutzer alle Noten eingetragen hat
             $semesterStatement = $pdo->prepare("SELECT semester FROM grades WHERE userid = ? GROUP BY semester;");
             $semesterStatement->execute(array($_SESSION['userid']));
 
-            if ($semesterStatement->rowCount() < 4) {
-                echo '
-                <a class="button" href="enter-grades.php">Noten eintragen</a>
-                <br>
-                <p>Du musst in allen vier Semestern Noten eintragen, um die Punkte zu berechnen.</p>
-                ';
+            if ($semesterStatement->rowCount() > 3) {
+
+                // Überprüfen ob der Benutzer alle Prüfungen eingetragen hat
+                $statement = $pdo->prepare("SELECT * FROM exams WHERE userid = ?");
+                $statement->execute(array($_SESSION['userid']));
+
+                if ($statement->rowCount() > 3) {
+                    echo '' . calculatePoints($pdo, $_SESSION['userid']);
+                } else {
+                    echo 'Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.';
+                }
             } else {
-                echo '<br><br>'. calculatePoints($pdo, $_SESSION['userid']) .'<br><br>';
+                echo 'Du musst in allen vier Semestern Noten eintragen, um die Punkte zu berechnen.';
             }
             ?>
-        
-
+            <br><br>
             <table>
                 <thead>
                     <tr>
@@ -121,10 +112,26 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                         <td></td>
                         <?php
                         for ($i = 1; $i <= 4; $i++) {
-                            echo '<td><a class="button" href="edit-grades.php?semester=' . $i . '">Noten bearbeiten</a></td>';
+                            $statement = $pdo->prepare("SELECT * FROM grades WHERE semester = ? AND userid = ?");
+                            $statement->execute([$i, $_SESSION['userid']]);
+
+                            if ($statement->rowCount() > 0) {
+                                echo '<td><a class="button" href="edit-grades.php?semester=' . $i . '">Noten bearbeiten</a></td>';
+                            } else {
+                                echo '<td><a class="button" href="enter-grades.php?semester=' . $i . '">Noten eintragen</a></td>';
+                            }
                         }
                         ?>
-                        <td><a class="button" href="edit-exams.php">Prüfungen bearbeiten</a></td>
+
+                        <?php
+                        $statement = $pdo->prepare("SELECT * FROM exams WHERE userid = ?");
+                        $statement->execute(array($_SESSION['userid']));
+                        if ($statement->rowCount() > 0) {
+                            echo '<td><a class="button" href="edit-exams.php">Prüfungen bearbeiten</a></td>';
+                        } else {
+                            echo '<td><a class="button" href="enter-exams.php">Prüfungen eintragen</a></td>';
+                        }
+                        ?>
                     </tr>
                 </tbody>
             </table>
