@@ -4,6 +4,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['userDisplayName'])) {
+    header("Location: index.php?not-logind=1");
+    exit();
+}
+
 $host = "localhost";
 $user = "root";
 $password = "";

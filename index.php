@@ -32,6 +32,14 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             ?>
         <div class="content">
             <?php
+            if (isset($_GET['not-logind'])) {
+                echo "<div class='login-form text-red'>
+                    Du musst dich erst einloggen um auf diese Seite zu kommen!
+                    </div>
+                ";
+            }
+            ?>
+            <?php
             if (isset($_SESSION['userDisplayName'])) {
                 echo "<h1>Willkommen " . $_SESSION['userDisplayName'] . " auf Notes Points Checker!</h1>";
             } else {
