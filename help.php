@@ -38,6 +38,9 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 <div class="login-form">
                     <img src="https://cdn.discordapp.com/attachments/795090945007812640/1182227688757415988/harold-hide-the-pain-meme-09.jpg" alt="Herold am Phone" class="image">
                     <h2>Kundenhotline</h2>
+                    <p>Wenn du Probleme mit der Seite hast, kannst du dich gerne an die Kundenhotline wenden.</p>
+                    <p>Die Kundenhotline ist von Samstags bis Sonntags von 23:59 bis 00:00 Uhr erreichbar.</p>
+                    <p>Die Nummer lautet: 0123 456789</p>
                 </div>
             </center>
         </div>
