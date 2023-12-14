@@ -66,7 +66,9 @@ $user = $statement->fetch();
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
+                    $pointsYou = 0;
+                    $pointsHe = 0;
                     $subjectSql = "SELECT * FROM subjects";
                     foreach ($pdo->query($subjectSql) as $row) {
                         echo "<tr>";
@@ -88,6 +90,9 @@ $user = $statement->fetch();
 
                             echo "<td>" . ($grade ? $grade['grade'] : 'Keine Daten') . "</td>";
                             echo "<td>" . ($grade2 ? $grade2['grade'] : 'Keine Date') . "</td>";
+
+                            $pointsYou += ($grade ? $grade['grade'] : 0);
+                            $pointsHe += ($grade2 ? $grade2['grade'] : 0);
                         }
                         echo "</tr>";
                     }
@@ -95,6 +100,18 @@ $user = $statement->fetch();
 
                 </tbody>
             </table>
+            <?php
+            echo "<center><div class='login-form'><h2>Ergebnis</h2>";
+            echo "<p>Du hast insgesamt $pointsYou Punkte und er/sie hat $pointsHe Punkte.</p>";
+            if ($pointsYou > $pointsHe) {
+                echo "<p>Du hast mehr Punkte als er/sie.</p>";
+            } else if ($pointsYou < $pointsHe) {
+                echo "<p>Du hast weniger Punkte als er/sie.</p>";
+            } else {
+                echo "<p>Ihr habt gleich viele Punkte.</p>";
+            }
+            echo "</div></center>";
+            ?>
             <br>
         </div>
     </div>
