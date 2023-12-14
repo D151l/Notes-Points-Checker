@@ -37,7 +37,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             <p>Hier hast du eine Übersicht all deiner Noten!</p>
 
             <a class="button" href="performance-courses.php">Prüfungsfächer bearbeiten</a>
-            <br><br>
+            <br>
             <?php
             // Überprüfen ob der Benutzer alle Noten eingetragen hat
             $semesterStatement = $pdo->prepare("SELECT semester FROM grades WHERE userid = ? GROUP BY semester;");
@@ -52,13 +52,13 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 if ($statement->rowCount() > 3) {
                     echo '' . calculatePoints($pdo, $_SESSION['userid']);
                 } else {
-                    echo 'Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.';
+                    echo '<div class="login-form">Du musst in allen fünf Prüfungen Noten eintragen, um die Punkte zu berechnen.</div>';
                 }
             } else {
-                echo 'Du musst in allen vier Semestern Noten eintragen, um die Punkte zu berechnen.';
+                echo '<div class="login-form">Du musst in allen vier Semestern Noten eintragen, um die Punkte zu berechnen.</div>';
             }
             ?>
-            <br><br>
+            <br>
             <table>
                 <thead>
                     <tr>
@@ -164,7 +164,7 @@ function calculatePoints($pdo, $userId)
     $statementt->execute([$userId]);
 
     if ($statementt->rowCount() > 7) {
-        return "Du hast mehr als 7 Unterkurse und hast damit <span class='text-red'>nicht bestanden</span>!";
+        return "<div class='login-form'>Du hast mehr als 7 Unterkurse und hast damit <span class='text-red'>nicht bestanden</span>!</div>";
     }
 
     $gradesStatement = $pdo->prepare("SELECT * FROM grades WHERE userid = ?");
@@ -176,7 +176,7 @@ function calculatePoints($pdo, $userId)
         $points = $points + $row['grade'];
 
         if ($row['grade'] == 0) {
-            return 'Du hast 0 Punkte in '. $row['subjectId'] .' und hast damit <span class="text-red">nicht bestanden</span>!';
+            return '<div class="login-form">Du hast 0 Punkte in '. $row['subjectId'] .' und hast damit <span class="text-red">nicht bestanden</span>!</div>';
         }
 
         $performanceCoursesStatement = $pdo->prepare("SELECT * FROM performance_courses WHERE userid = ? AND subjectId = ?");
@@ -196,7 +196,7 @@ function calculatePoints($pdo, $userId)
     }
 
     if ($lowerCourses > 3) {
-        return 'Du hast '. $lowerCourses .' Unterkurse und damit die 3 Unterkurse die du haben darft überstritten. Du hast damit <span class="text-red">nicht bestanden</span>!';
+        return '<div class="login-form">Du hast '. $lowerCourses .' Unterkurse und damit die 3 Unterkurse die du haben darft überstritten. Du hast damit <span class="text-red">nicht bestanden</span>!</div>';
     }
 
 
@@ -213,10 +213,10 @@ function calculatePoints($pdo, $userId)
 
     if ($points >= 300) {
         $points = round($points);
-        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-green'>bestanden</span>!";
+        return "<div class='login-form'>Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-green'>bestanden</span>!</div>";
     } else {
         $points = round($points);
-        return "Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-red'>nicht bestanden</span>!";
+        return "<div class='login-form'>Du hast mit deinen momentanen Noten $points Punkte und hast damit <span class='text-red'>nicht bestanden</span>!</div>";
     }
 }
 
