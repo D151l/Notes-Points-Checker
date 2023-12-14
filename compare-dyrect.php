@@ -83,10 +83,11 @@ $user = $statement->fetch();
 
                             $gradeStatement = $pdo->prepare($gradeSql);
                             $gradeStatement->execute(array($user['id'], $row['id'], $i));
+
                             $grade2 = $gradeStatement->fetch();
 
-                            echo "<td>" . $grade['grade'] . "</td>";
-                            echo "<td>" . $grade2['grade'] . "</td>";
+                            echo "<td>" . ($grade ? $grade['grade'] : 'Keine Daten') . "</td>";
+                            echo "<td>" . ($grade2 ? $grade2['grade'] : 'Keine Date') . "</td>";
                         }
                         echo "</tr>";
                     }
