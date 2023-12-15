@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <form action="enter-exams.php" method="post">
                             ';
                 // Anzeigen von Formularelementen
-                displayFormElements($performanceCourses);
+                displayFormElements($pdo, $performanceCourses);
 
                 echo '
                                 <button type="submit">Speichern</button>
@@ -99,10 +99,16 @@ function getPerformanceCourses($pdo, $userId)
 }
 
 // Funktion zum Anzeigen von Formularelementen
-function displayFormElements($performanceCourses)
+function displayFormElements($pdo, $performanceCourses)
 {
     foreach ($performanceCourses as $row) {
-        echo $row["subjectId"];
+        $statement = $pdo->prepare("SELECT *
+        FROM subjects
+        WHERE id = ?");
+        $statement->execute([$row["subjectId"]]);
+        $grade = $statement->fetch();
+
+        echo $grade["displayName"];
         echo '<input type="number" id="' . $row["subjectId"] . '" name="' . $row["subjectId"] . '" min="0" max="15" required>';
     }
 }
