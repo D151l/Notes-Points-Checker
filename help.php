@@ -41,6 +41,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     <p>Wenn du Probleme mit der Seite hast, kannst du dich gerne an die Kundenhotline wenden.</p>
                     <p>Die Kundenhotline ist von Samstags bis Sonntags von 23:59 bis 00:00 Uhr erreichbar.</p>
                     <p>Die Nummer lautet: 0123 456789</p>
+                    <p>25/8 Support per Email: hilfe@vertrau-mir-bruder.eu</p>
                 </div>
             </center>
         </div>
