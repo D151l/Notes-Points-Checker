@@ -109,12 +109,11 @@ function getPerformanceCourses($pdo, $userId)
 function displayFormElements($pdo, $performanceCourses)
 {
     foreach ($performanceCourses as $row) {
-
         $statement = $pdo->prepare("SELECT *
         FROM exams 
         INNER JOIN subjects ON exams.subjectId=subjects.id
-        WHERE userid = ? ");
-        $statement->execute([$_SESSION['userid']]);
+        WHERE userid = ? AND subjectId = ?");
+        $statement->execute([$_SESSION['userid'], $row["subjectId"]]);
         $grade = $statement->fetch();
 
         echo $grade["displayName"];
